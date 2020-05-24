@@ -7,7 +7,7 @@ int main() {
   std::cout << "henlo";
   sf::ContextSettings settings;
   settings.antialiasingLevel = 8;
-  sf::RenderWindow window(sf::VideoMode(1920, 1080), "SFML", sf::Style::Default, settings);
+  sf::RenderWindow window(sf::VideoMode(960, 768), "SFML", sf::Style::Default, settings);
   window.setVerticalSyncEnabled(true);
   while (window.isOpen()) {
     sf::Event evnt;
