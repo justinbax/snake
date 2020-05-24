@@ -1,0 +1,9 @@
+# Mac
+._*
+.DS_Store
+
+# Visual Studio Code
+.vscode
+
+# Binaries
+bin
