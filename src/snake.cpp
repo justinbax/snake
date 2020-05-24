@@ -1,7 +1,8 @@
 #include "snake.h"
 #include <vector>
 
-SnakeTile::SnakeTile(sf::Vector2f position, int direction) {
+SnakeTile::SnakeTile(sf::Vector2f position, int direction, sf::Texture *tile) {
+  this->sprite.setTexture(*tile);
   this->sprite.setPosition(position);
   this->direction = direction;
 }
@@ -34,21 +35,28 @@ int SnakeTile::getDirection() {
   return this->direction;
 }
 
-Snake::Snake(sf::Vector2f startingPos, int direction) {
+sf::Sprite* SnakeTile::getSprite() {
+  return &this->sprite;
+}
+
+Snake::Snake(sf::Vector2f startingPos, int direction, sf::Texture *tile) {
   sf::Vector2f position = {startingPos.x, startingPos.y};
   for (int i = 0; i < 4; i++) {
     switch (direction) {
       case 0:
-        position.y += -16 * i;
+        position.y += -16;
         break;
       case 1:
-        position.x += 16 * i;
+        position.x += 16;
+        break;
       case 2:
-        position.y += 16 * i;
+        position.y += 16;
+        break;
       case 3:
-        position.x += -16 * i;
+        position.x += -16;
+        break;
     }
-    SnakeTile *ptr = new SnakeTile(position, direction);
+    SnakeTile *ptr = new SnakeTile(position, direction, tile);
     std::vector<SnakeTile>::iterator it;
     it = this->snakeTiles.begin();
     it = this->snakeTiles.insert(it, *ptr);
@@ -83,8 +91,14 @@ void Snake::move(int direction) {
       }
       break;
   }
-  for (int i = 0; i < this->snakeTiles.size() - 1; i++) {
+  for (int i = 0; i < this->snakeTiles.size(); i++) {
     this->snakeTiles[i].move();
+  }
+}
+
+void Snake::draw(sf::RenderWindow *window) {
+  for (int i = 0; i < this->snakeTiles.size(); i++) {
+    (*window).draw(*(this->snakeTiles[i].getSprite()));
   }
 }
 
