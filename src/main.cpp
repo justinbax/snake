@@ -47,6 +47,13 @@ int main() {
       player.eat(&tileTexture);
       food.changePosition(&player);
     }
+    sf::Vector2f plPos = player.getPosition(0);
+    for (int i = 1; i < player.getLength(); i++) {
+      if (plPos == player.getPosition(i) or plPos.x <= 0 or plPos.x >= 960 or plPos.y <= 0 or plPos.y >= 768) {
+        window.close();
+        std::cout << "Game over!" << std::endl;
+      }
+    }
     window.clear(sf::Color::Black);
     window.draw(*food.getSprite());
     player.draw(&window);

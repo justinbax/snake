@@ -122,10 +122,9 @@ void Snake::eat(sf::Texture *texture) {
       break;
   }
   SnakeTile *ptr = new SnakeTile(newPos, this->snakeTiles[this->getLength() - 1].getDirection(), texture);
-  std::vector<SnakeTile>::iterator it;
-  it = this->snakeTiles.end();
-  it = this->snakeTiles.insert(it, *ptr);
+  this->snakeTiles.push_back(*ptr);
   delete ptr;
+  this->length++;
 }
 
 sf::Vector2f Snake::getPosition(int position) {
