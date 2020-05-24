@@ -66,7 +66,7 @@ Snake::Snake(sf::Vector2f startingPos, int direction, sf::Texture *tile) {
 }
 
 void Snake::move(int direction) {
-  SnakeTile *firstSnakeTile = &this->snakeTiles[this->snakeTiles.size() - 1];
+  SnakeTile *firstSnakeTile = &this->snakeTiles[0];
   switch (direction) {
     case -1:
       break;
@@ -93,6 +93,9 @@ void Snake::move(int direction) {
   }
   for (int i = 0; i < this->snakeTiles.size(); i++) {
     this->snakeTiles[i].move();
+  }
+  for (int i = this->snakeTiles.size() - 1; i > 0; i--) {
+    this->snakeTiles[i].setDirection(this->snakeTiles[i - 1].getDirection());
   }
 }
 

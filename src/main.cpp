@@ -17,6 +17,7 @@ int main() {
 
   Snake player(sf::Vector2f(rand() % 60 * 16, rand() % 48 * 16), rand() % 4, &tileTexture);
   sf::Clock clock;
+  int newDirection = -1;
   while (window.isOpen()) {
     sf::Event evnt;
     while (window.pollEvent(evnt)) {
@@ -25,10 +26,20 @@ int main() {
       } else if (evnt.type == sf::Event::KeyPressed) {
         if (evnt.key.code == sf::Keyboard::Escape) {
           window.close();
+        } else if (evnt.key.code == sf::Keyboard::W) {
+          newDirection = 0;
+        } else if (evnt.key.code == sf::Keyboard::D) {
+          newDirection = 1;
+        } else if (evnt.key.code == sf::Keyboard::S) {
+          newDirection = 2;
+        } else if (evnt.key.code == sf::Keyboard::A) {
+          newDirection = 3;
         }
       }
     }
-    if (clock.getElapsedTime().asMilliseconds() >= 1000) {
+    if (clock.getElapsedTime().asMilliseconds() >= 350) {
+      player.move(newDirection);
+      newDirection = -1;
       clock.restart();
     }
     window.clear(sf::Color::Black);
