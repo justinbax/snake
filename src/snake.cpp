@@ -7,7 +7,8 @@ SnakeTile::SnakeTile(sf::Vector2f position, int direction) {
 }
 
 void SnakeTile::move() {
-  int deltaX, deltaY;
+  int deltaX = 0;
+  int deltaY = 0;
   switch (this->direction) {
     case 0:
       deltaY += -16;
@@ -45,7 +46,7 @@ Snake::Snake(sf::Vector2f startingPos, int direction) {
       case 2:
         position.y += 16 * i;
       case 3:
-        position.x ++ -16 * i;
+        position.x += -16 * i;
     }
     SnakeTile *ptr = new SnakeTile(position, direction);
     std::vector<SnakeTile>::iterator it;
@@ -97,6 +98,7 @@ sf::Vector2f Food::getPosition() {
 
 void Food::changePosition() {
   srand(time(0));
-  sf::Vector2f newPos = {rand() % 60, rand() % 48};
-  this->sprite.setPosition(sf::Vector2f(newPos.x * 16, newPos.y * 16));
+  int x = rand() % 60;
+  int y = rand() % 48;
+  this->sprite.setPosition(sf::Vector2f(x * 16, y * 16));
 }
