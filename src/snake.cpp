@@ -105,20 +105,60 @@ void Snake::draw(sf::RenderWindow *window) {
   }
 }
 
-Food::Food(sf::Texture *texture) {
+void Snake::eat(sf::Texture *texture) {
+  sf::Vector2f newPos = this->getPosition(this->getLength() - 1);
+  switch (this->snakeTiles[this->getLength() - 1].getDirection()) {
+    case 0:
+      newPos.y += 16;
+      break;
+    case 1:
+      newPos.x += -16;
+      break;
+    case 2:
+      newPos.y += -16;
+      break;
+    case 3:
+      newPos.x += 16;
+      break;
+  }
+  SnakeTile *ptr = new SnakeTile(newPos, this->snakeTiles[this->getLength() - 1].getDirection(), texture);
+  std::vector<SnakeTile>::iterator it;
+  it = this->snakeTiles.end();
+  it = this->snakeTiles.insert(it, *ptr);
+  delete ptr;
+}
+
+sf::Vector2f Snake::getPosition(int position) {
+  return (*this->snakeTiles[position].getSprite()).getPosition();
+}
+
+int Snake::getLength() {
+  return this->length;
+}
+
+Food::Food(sf::Texture *texture, Snake *player) {
   this->sprite.setTexture(*texture);
-  this->changePosition();
+  this->changePosition(player);
 }
 
 sf::Vector2f Food::getPosition() {
   return this->sprite.getPosition();
 }
 
-void Food::changePosition() {
+void Food::changePosition(Snake *player) {
   srand(time(0));
   int x = rand() % 60;
   int y = rand() % 48;
-  this->sprite.setPosition(sf::Vector2f(x * 16, y * 16));
+  sf::Vector2f newPos = {float(x * 16), float(y * 16)};
+  for (int i = 0; i < (*player).getLength(); i++) {
+    while (newPos == (*player).getPosition(i)) {
+      x = rand() % 60;
+      y = rand() % 48;
+      newPos = {float(x * 16), float(y * 16)};
+      i = 0;
+    }
+  }
+  this->sprite.setPosition(newPos);
 }
 
 sf::Sprite* Food::getSprite() {

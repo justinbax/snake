@@ -22,6 +22,9 @@ class Snake {
     Snake(sf::Vector2f, int, sf::Texture*);
     void move(int);
     void draw(sf::RenderWindow*);
+    void eat(sf::Texture *);
+    sf::Vector2f getPosition(int);
+    int getLength();
   private:
     int length;
     std::vector<SnakeTile> snakeTiles;
@@ -29,9 +32,9 @@ class Snake {
 
 class Food {
   public:
-    Food(sf::Texture *);
+    Food(sf::Texture *, Snake *);
     sf::Vector2f getPosition();
-    void changePosition();
+    void changePosition(Snake *);
     sf::Sprite* getSprite();
   private:
     sf::Sprite sprite;
