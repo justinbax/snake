@@ -16,6 +16,7 @@ int main() {
   }
 
   Snake player(sf::Vector2f(rand() % 60 * 16, rand() % 48 * 16), rand() % 4, &tileTexture);
+  Food food(&tileTexture);
   sf::Clock clock;
   int newDirection = -1;
   while (window.isOpen()) {
@@ -43,6 +44,7 @@ int main() {
       clock.restart();
     }
     window.clear(sf::Color::Black);
+    window.draw(*food.getSprite());
     player.draw(&window);
     window.display();
   }

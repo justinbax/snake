@@ -29,9 +29,10 @@ class Snake {
 
 class Food {
   public:
-    Food();
+    Food(sf::Texture *);
     sf::Vector2f getPosition();
     void changePosition();
+    sf::Sprite* getSprite();
   private:
     sf::Sprite sprite;
 };

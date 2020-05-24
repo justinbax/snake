@@ -105,7 +105,8 @@ void Snake::draw(sf::RenderWindow *window) {
   }
 }
 
-Food::Food() {
+Food::Food(sf::Texture *texture) {
+  this->sprite.setTexture(*texture);
   this->changePosition();
 }
 
@@ -118,4 +119,8 @@ void Food::changePosition() {
   int x = rand() % 60;
   int y = rand() % 48;
   this->sprite.setPosition(sf::Vector2f(x * 16, y * 16));
+}
+
+sf::Sprite* Food::getSprite() {
+  return &this->sprite;
 }
