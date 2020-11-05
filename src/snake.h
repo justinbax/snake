@@ -22,7 +22,7 @@ class Snake {
     Snake(sf::Vector2f, int, sf::Texture*);
     void move(int);
     void draw(sf::RenderWindow*);
-    void eat(sf::Texture *);
+    void eat(sf::Texture *, int *);
     sf::Vector2f getPosition(int);
     int getLength();
   private:

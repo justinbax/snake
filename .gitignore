@@ -7,3 +7,6 @@
 
 # Binaries
 bin
+*.o
+*.exe
+*.out

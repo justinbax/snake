@@ -7,7 +7,7 @@ int main() {
   srand(time(0));
   sf::ContextSettings settings;
   settings.antialiasingLevel = 8;
-  sf::RenderWindow window(sf::VideoMode(960, 768), "SFML", sf::Style::Default, settings);
+  sf::RenderWindow window(sf::VideoMode(30 * 32, 24 * 32), "SFML", sf::Style::Default, settings);
   window.setVerticalSyncEnabled(true);
 
   sf::Texture tileTexture;
@@ -15,7 +15,8 @@ int main() {
     std::cerr << "Can't load ./content/tile.png" << std::endl;
   }
 
-  Snake player(sf::Vector2f(rand() % 60 * 16, rand() % 48 * 16), rand() % 4, &tileTexture);
+  Snake player(sf::Vector2f((rand() % 20 + 5) * 32, (rand() % 18 + 3) * 32), rand() % 4, &tileTexture);
+  int eating = 0;
   Food food(&tileTexture, &player);
   sf::Clock clock;
   int newDirection = -1;
@@ -38,18 +39,22 @@ int main() {
         }
       }
     }
-    if (clock.getElapsedTime().asMilliseconds() >= 350) {
+    if (clock.getElapsedTime().asMilliseconds() >= 130) {
       player.move(newDirection);
       newDirection = -1;
       clock.restart();
+      if (eating != 0) {
+        player.eat(&tileTexture, &eating);
+      }
     }
     if ((*food.getSprite()).getPosition() == player.getPosition(0)) {
-      player.eat(&tileTexture);
+      eating += 2;
+      player.eat(&tileTexture, &eating);
       food.changePosition(&player);
     }
     sf::Vector2f plPos = player.getPosition(0);
     for (int i = 1; i < player.getLength(); i++) {
-      if (plPos == player.getPosition(i) or plPos.x <= 0 or plPos.x >= 960 or plPos.y <= 0 or plPos.y >= 768) {
+      if (plPos == player.getPosition(i) or plPos.x < 0 or plPos.x >= 960 or plPos.y < 0 or plPos.y >= 768) {
         window.close();
         std::cout << "Game over!" << std::endl;
       }

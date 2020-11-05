@@ -12,16 +12,16 @@ void SnakeTile::move() {
   int deltaY = 0;
   switch (this->direction) {
     case 0:
-      deltaY += -16;
+      deltaY += -32;
       break;
     case 1:
-      deltaX += 16;
+      deltaX += 32;
       break;
     case 2:
-      deltaY += 16;
+      deltaY += 32;
       break;
     case 3:
-      deltaX += -16;
+      deltaX += -32;
       break;
   }
   this->sprite.move(sf::Vector2f(deltaX, deltaY));
@@ -44,16 +44,16 @@ Snake::Snake(sf::Vector2f startingPos, int direction, sf::Texture *tile) {
   for (int i = 0; i < 4; i++) {
     switch (direction) {
       case 0:
-        position.y += -16;
+        position.y += -32;
         break;
       case 1:
-        position.x += 16;
+        position.x += 32;
         break;
       case 2:
-        position.y += 16;
+        position.y += 32;
         break;
       case 3:
-        position.x += -16;
+        position.x += -32;
         break;
     }
     SnakeTile *ptr = new SnakeTile(position, direction, tile);
@@ -61,6 +61,7 @@ Snake::Snake(sf::Vector2f startingPos, int direction, sf::Texture *tile) {
     it = this->snakeTiles.begin();
     it = this->snakeTiles.insert(it, *ptr);
     delete ptr;
+    this->snakeTiles[0].getSprite()->setScale(sf::Vector2f(2, 2));
   }
   this->length = this->snakeTiles.size();
 }
@@ -105,26 +106,28 @@ void Snake::draw(sf::RenderWindow *window) {
   }
 }
 
-void Snake::eat(sf::Texture *texture) {
+void Snake::eat(sf::Texture *texture, int *eating) {
   sf::Vector2f newPos = this->getPosition(this->getLength() - 1);
   switch (this->snakeTiles[this->getLength() - 1].getDirection()) {
     case 0:
-      newPos.y += 16;
+      newPos.y += 32;
       break;
     case 1:
-      newPos.x += -16;
+      newPos.x += -32;
       break;
     case 2:
-      newPos.y += -16;
+      newPos.y += -32;
       break;
     case 3:
-      newPos.x += 16;
+      newPos.x += 32;
       break;
   }
   SnakeTile *ptr = new SnakeTile(newPos, this->snakeTiles[this->getLength() - 1].getDirection(), texture);
   this->snakeTiles.push_back(*ptr);
   delete ptr;
   this->length++;
+  (*eating)--;
+  this->snakeTiles[this->snakeTiles.size() - 1].getSprite()->setScale(sf::Vector2f(2, 2));
 }
 
 sf::Vector2f Snake::getPosition(int position) {
@@ -137,6 +140,7 @@ int Snake::getLength() {
 
 Food::Food(sf::Texture *texture, Snake *player) {
   this->sprite.setTexture(*texture);
+  this->sprite.setScale(sf::Vector2f(2, 2));
   this->changePosition(player);
 }
 
@@ -146,14 +150,14 @@ sf::Vector2f Food::getPosition() {
 
 void Food::changePosition(Snake *player) {
   srand(time(0));
-  int x = rand() % 60;
-  int y = rand() % 48;
-  sf::Vector2f newPos = {float(x * 16), float(y * 16)};
+  int x = rand() % 30;
+  int y = rand() % 24;
+  sf::Vector2f newPos = {float(x * 32), float(y * 32)};
   for (int i = 0; i < (*player).getLength(); i++) {
     while (newPos == (*player).getPosition(i)) {
-      x = rand() % 60;
-      y = rand() % 48;
-      newPos = {float(x * 16), float(y * 16)};
+      x = rand() % 30;
+      y = rand() % 24;
+      newPos = {float(x * 32), float(y * 32)};
       i = 0;
     }
   }
