@@ -1,5 +1,6 @@
 #include "tile.h"
 #include <cmath>
+#include <iostream>
 
 Node::Node() {
 	this->global = INFINITY;

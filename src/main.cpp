@@ -6,17 +6,16 @@
 
 int main() {
   constexpr int TILEDIMENSIONS = 32;
-  constexpr int MAPHEIGHT = 24;
-  constexpr int MAPWIDTH = 30;
+  constexpr int MAPHEIGHT = 20;
+  constexpr int MAPWIDTH = 20;
 
-  constexpr int UP = 0;
-  constexpr int LEFT = 1;
-  constexpr int DOWN = 2;
-  constexpr int RIGHT = 3;
+  constexpr int DOWN = 0;
+  constexpr int RIGHT = 1;
+  constexpr int UP = 2;
+  constexpr int LEFT = 3;
 
-  // test
   std::vector<SnakeTile> path;
-  // end test
+  std::vector<SnakeTile> walls;
 
   srand(time(0));
   sf::ContextSettings settings;
@@ -29,7 +28,7 @@ int main() {
     std::cerr << "Can't load ./content/tile.png" << std::endl;
   }
 
-  Snake player(sf::Vector2f((rand() % 20 + 5) * TILEDIMENSIONS, (rand() % 18 + 3) * TILEDIMENSIONS), rand() % 4, tileTexture);
+  Snake player(sf::Vector2f(6 * TILEDIMENSIONS, 6 * TILEDIMENSIONS), RIGHT, tileTexture);
   int eating = 0;
   Food food(tileTexture, player);
   sf::Clock clock;
@@ -45,7 +44,7 @@ int main() {
         }
       }
     }
-    if (clock.getElapsedTime().asMilliseconds() >= 700) {
+    if (clock.getElapsedTime().asMilliseconds() >= 150) {
       Node nodes[MAPHEIGHT * MAPWIDTH];
       for (int i = 0; i < MAPHEIGHT; i++) {
         for (int j = 0; j < MAPWIDTH; j++) {
@@ -58,14 +57,13 @@ int main() {
         }
       }
       int index = player.getPosition(0).y * MAPHEIGHT / TILEDIMENSIONS + player.getPosition(0).x / TILEDIMENSIONS;
-      Node *start = &nodes[index - 1];
-      index = food.getPosition().y * MAPHEIGHT / TILEDIMENSIONS + food.getPosition().x / TILEDIMENSIONS;
       Node *end = &nodes[index];
-      std::cout << "end : " << end->getPosition().x << " " << end->getPosition().y << std::endl;
+      index = food.getPosition().y * MAPHEIGHT / TILEDIMENSIONS + food.getPosition().x / TILEDIMENSIONS;
+      Node *start = &nodes[index];
       start->setStart(end);
       std::vector<Node *> toVisit;
       toVisit.push_back(start);
-      for (int i = 0; i < player.getLength(); i++) {
+      for (int i = 1; i < player.getLength(); i++) {
         index = player.getPosition(i).y / TILEDIMENSIONS * MAPHEIGHT + player.getPosition(i).x / TILEDIMENSIONS;
         nodes[index].setPassThrough(false);
       }
@@ -111,7 +109,6 @@ int main() {
     for (int i = 1; i < player.getLength(); i++) {
       if (plPos == player.getPosition(i) || plPos.x < 0 || plPos.x >= MAPWIDTH * TILEDIMENSIONS || plPos.y < 0 || plPos.y >= MAPHEIGHT * TILEDIMENSIONS) {
         window.close();
-        std::cout << "Game over!" << std::endl;
       }
     }
     window.clear(sf::Color::Black);
@@ -120,7 +117,11 @@ int main() {
     for (int i = 0; i < path.size(); i++) {
       window.draw(path[i].getSprite());
     }
+    for (int i = 0; i < walls.size(); i++) {
+      window.draw(walls[i].getSprite());
+    }
     window.display();
   }
+  std::cout << "Game over!" << std::endl;
   return 0;
 }

@@ -8,18 +8,17 @@ SnakeTile::SnakeTile(sf::Vector2f position, int direction, sf::Texture &tile) {
 }
 
 void SnakeTile::move() {
-
   int deltaX = 0;
   int deltaY = 0;
   switch (this->direction) {
     case 0:
-      deltaY += -32;
+      deltaY += 32;
       break;
     case 1:
       deltaX += 32;
       break;
     case 2:
-      deltaY += 32;
+      deltaY += -32;
       break;
     case 3:
       deltaX += -32;
@@ -151,13 +150,13 @@ sf::Vector2f Food::getPosition() {
 
 void Food::changePosition(Snake &player) {
   srand(time(0));
-  int x = rand() % 30;
-  int y = rand() % 24;
+  int x = rand() % 20;
+  int y = rand() % 20;
   sf::Vector2f newPos = {float(x * 32), float(y * 32)};
   for (int i = 0; i < player.getLength(); i++) {
     while (newPos == player.getPosition(i)) {
-      x = rand() % 30;
-      y = rand() % 24;
+      x = rand() % 20;
+      y = rand() % 20;
       newPos = {float(x * 32), float(y * 32)};
       i = 0;
     }
