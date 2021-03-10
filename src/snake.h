@@ -7,11 +7,11 @@
 
 class SnakeTile {
   public:
-    SnakeTile(sf::Vector2f, int, sf::Texture*);
+    SnakeTile(sf::Vector2f, int, sf::Texture&);
     void move();
     void setDirection(int);
     int getDirection();
-    sf::Sprite* getSprite();
+    sf::Sprite& getSprite();
   private:
     sf::Sprite sprite;
     int direction;
@@ -19,10 +19,10 @@ class SnakeTile {
 
 class Snake {
   public:
-    Snake(sf::Vector2f, int, sf::Texture*);
+    Snake(sf::Vector2f, int, sf::Texture&);
     void move(int);
-    void draw(sf::RenderWindow*);
-    void eat(sf::Texture *, int *);
+    void draw(sf::RenderWindow&);
+    void eat(sf::Texture&, int&);
     sf::Vector2f getPosition(int);
     int getLength();
   private:
@@ -32,10 +32,10 @@ class Snake {
 
 class Food {
   public:
-    Food(sf::Texture *, Snake *);
+    Food(sf::Texture&, Snake&);
     sf::Vector2f getPosition();
-    void changePosition(Snake *);
-    sf::Sprite* getSprite();
+    void changePosition(Snake &);
+    sf::Sprite& getSprite();
   private:
     sf::Sprite sprite;
 };
