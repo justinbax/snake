@@ -1,5 +1,4 @@
 #include "snake.h"
-#include <vector>
 
 SnakeTile::SnakeTile(sf::Vector2f position, int direction, sf::Texture &tile) {
   this->sprite.setTexture(tile);
@@ -40,55 +39,49 @@ sf::Sprite &SnakeTile::getSprite() {
 }
 
 Snake::Snake(sf::Vector2f startingPos, int direction, sf::Texture &tile) {
-  sf::Vector2f position = {startingPos.x, startingPos.y};
   for (int i = 0; i < 4; i++) {
     switch (direction) {
       case 0:
-        position.y += -32;
+        startingPos.y += -32;
         break;
       case 1:
-        position.x += 32;
+        startingPos.x += 32;
         break;
       case 2:
-        position.y += 32;
+        startingPos.y += 32;
         break;
       case 3:
-        position.x += -32;
+        startingPos.x += -32;
         break;
     }
-    SnakeTile *ptr = new SnakeTile(position, direction, tile);
-    std::vector<SnakeTile>::iterator it;
-    it = this->snakeTiles.begin();
-    it = this->snakeTiles.insert(it, *ptr);
-    delete ptr;
+    this->snakeTiles.insert(snakeTiles.begin(), SnakeTile(startingPos, direction, tile));
     this->snakeTiles[0].getSprite().setScale(sf::Vector2f(2, 2));
   }
   this->length = this->snakeTiles.size();
 }
 
 void Snake::move(int direction) {
-  SnakeTile *firstSnakeTile = &this->snakeTiles[0];
   switch (direction) {
     case -1:
       break;
     case 0:
-      if ((*firstSnakeTile).getDirection() != 2) {
-        (*firstSnakeTile).setDirection(direction);
+      if (this->snakeTiles[0].getDirection() != 2) {
+        this->snakeTiles[0].setDirection(direction);
       }
       break;
     case 1:
-      if ((*firstSnakeTile).getDirection() != 3) {
-        (*firstSnakeTile).setDirection(direction);
+      if (this->snakeTiles[0].getDirection() != 3) {
+        this->snakeTiles[0].setDirection(direction);
       }
       break;
     case 2:
-      if ((*firstSnakeTile).getDirection() != 0) {
-        (*firstSnakeTile).setDirection(direction);
+      if (this->snakeTiles[0].getDirection() != 0) {
+        this->snakeTiles[0].setDirection(direction);
       }
       break;
     case 3:
-      if ((*firstSnakeTile).getDirection() != 1) {
-        (*firstSnakeTile).setDirection(direction);
+      if (this->snakeTiles[0].getDirection() != 1) {
+        this->snakeTiles[0].setDirection(direction);
       }
       break;
   }
@@ -107,27 +100,25 @@ void Snake::draw(sf::RenderWindow &window) {
 }
 
 void Snake::eat(sf::Texture &texture, int &eating) {
-  sf::Vector2f newPos = this->getPosition(this->getLength() - 1);
-  switch (this->snakeTiles[this->getLength() - 1].getDirection()) {
+  sf::Vector2f newPos = this->snakeTiles.back().getSprite().getPosition();
+  switch (this->snakeTiles.back().getDirection()) {
     case 0:
       newPos.y += 32;
       break;
     case 1:
-      newPos.x += -32;
+      newPos.x += 32;
       break;
     case 2:
       newPos.y += -32;
       break;
     case 3:
-      newPos.x += 32;
+      newPos.x += -32;
       break;
   }
-  SnakeTile *ptr = new SnakeTile(newPos, this->snakeTiles[this->getLength() - 1].getDirection(), texture);
-  this->snakeTiles.push_back(*ptr);
-  delete ptr;
+  this->snakeTiles.push_back(SnakeTile(newPos, this->snakeTiles.back().getDirection(), texture));
   this->length++;
   eating--;
-  this->snakeTiles[this->snakeTiles.size() - 1].getSprite().setScale(sf::Vector2f(2, 2));
+  this->snakeTiles.back().getSprite().setScale(sf::Vector2f(2, 2));
 }
 
 sf::Vector2f Snake::getPosition(int position) {
